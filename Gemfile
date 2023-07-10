@@ -61,3 +61,4 @@ group :test do
   gem "vcr"
   gem 'simplecov'
 end
+gem "jsonapi-serializer"
