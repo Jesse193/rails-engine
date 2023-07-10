@@ -44,15 +44,12 @@ group :development, :test do
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "faker"
-
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
-
-gem 'simplecov', require: false, group: :test
 
 gem "faraday"
 gem "figaro"
@@ -62,4 +59,5 @@ group :test do
   gem "launchy"
   gem "webmock"
   gem "vcr"
+  gem 'simplecov'
 end
