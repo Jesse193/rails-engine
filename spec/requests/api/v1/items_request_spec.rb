@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "all items" do
+describe "items api" do
   it "can return all items" do
     create_list(:item, 12)
 
