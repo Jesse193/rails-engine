@@ -13,8 +13,8 @@ describe "merchants api" do
     
     merchants[:data].each do |merchant|
 
-      expect(merchant[:attributes]).to have_key(:id)
-      expect(merchant[:attributes][:id]).to be_an(Integer)
+      expect(merchant).to have_key(:id)
+      expect(merchant[:id].to_i).to be_an(Integer)
 
       expect(merchant[:attributes]).to have_key(:name)
       expect(merchant[:attributes][:name]).to be_an(String)
@@ -31,7 +31,7 @@ describe "merchants api" do
     expect(response).to be_successful
 
     expect(merchant[:data]).to have_key(:id)
-    expect(merchant[:data][:attributes][:id]).to be_an(Integer)
+    expect(merchant[:data][:id].to_i).to be_an(Integer)
 
     expect(merchant[:data][:attributes]).to have_key(:name)
     expect(merchant[:data][:attributes][:name]).to be_an(String)

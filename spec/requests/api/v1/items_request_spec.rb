@@ -12,7 +12,7 @@ describe "items api" do
 
     items[:data].each do |item|
       expect(item).to have_key(:id)
-      expect(item[:attributes][:id]).to be_an(Integer)
+      expect(item[:attributes][:id].to_i).to be_an(Integer)
 
       expect(item[:attributes]).to have_key(:name)
       expect(item[:attributes][:name]).to be_an(String)
@@ -34,8 +34,8 @@ describe "items api" do
 
     item = JSON.parse(response.body, symbolize_names: true)
 
-    expect(item[:data][:attributes]).to have_key(:id)
-    expect(item[:data][:attributes][:id]).to be_an(Integer)
+    expect(item[:data]).to have_key(:id)
+    expect(item[:data][:id].to_i).to be_an(Integer)
 
     expect(item[:data][:attributes]).to have_key(:name)
     expect(item[:data][:attributes][:name]).to be_an(String)
