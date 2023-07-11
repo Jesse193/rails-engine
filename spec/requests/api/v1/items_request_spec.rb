@@ -110,4 +110,20 @@ describe "items api" do
 
 
   end
+
+  it "can destroy item" do
+    merchant = create(:merchant).id
+    item = Item.create(name: "Computer", description: "Computer", unit_price: 1000, merchant_id: merchant)
+    item_params = ({name: "Computer", description: "Computer", unit_price: 1000, merchant_id: merchant})
+
+    headers = {"CONTENT_TYPE" => "application/json"}
+    delete "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
+    item = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+  end
+
+
+
+
 end
