@@ -1,4 +1,5 @@
+require 'jsonapi/serializer'
 class MerchantSerializer
   include JSONAPI::Serializer
-  attributes :name
+  attributes :id, :name
 end

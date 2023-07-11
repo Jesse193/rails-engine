@@ -8,23 +8,42 @@ describe "items api" do
     expect(response).to be_successful
 
     items = JSON.parse(response.body, symbolize_names: true)
-    expect(items.count).to eq(12)
+    expect(items[:data].count).to eq(12)
 
-    items.each do |item|
+    items[:data].each do |item|
       expect(item).to have_key(:id)
-      expect(item[:id]).to be_an(Integer)
+      expect(item[:attributes][:id]).to be_an(Integer)
 
-      expect(item).to have_key(:name)
-      expect(item[:name]).to be_an(String)
+      expect(item[:attributes]).to have_key(:name)
+      expect(item[:attributes][:name]).to be_an(String)
 
-      expect(item).to have_key(:description)
-      expect(item[:description]).to be_an(String)
+      expect(item[:attributes]).to have_key(:description)
+      expect(item[:attributes][:description]).to be_an(String)
 
-      expect(item).to have_key(:unit_price)
-      expect(item[:unit_price]).to be_an(Float)
+      expect(item[:attributes]).to have_key(:unit_price)
+      expect(item[:attributes][:unit_price]).to be_an(Float)
 
-      # expect(item).to have_foreign_key(merchant_id)
-      # expect(item[:merchant_id]).to be_an(Integer)
     end
+  end
+
+  it "can find item by id" do
+    id = create(:item).id
+
+    get "/api/v1/items/#{id}"
+    expect(response).to be_successful
+
+    item = JSON.parse(response.body, symbolize_names: true)
+
+    expect(item[:data][:attributes]).to have_key(:id)
+    expect(item[:data][:attributes][:id]).to be_an(Integer)
+
+    expect(item[:data][:attributes]).to have_key(:name)
+    expect(item[:data][:attributes][:name]).to be_an(String)
+
+    expect(item[:data][:attributes]).to have_key(:description)
+    expect(item[:data][:attributes][:description]).to be_an(String)
+
+    expect(item[:data][:attributes]).to have_key(:unit_price)
+    expect(item[:data][:attributes][:unit_price]).to be_an(Float)
   end
 end
