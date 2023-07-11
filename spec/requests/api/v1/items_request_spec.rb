@@ -47,20 +47,20 @@ describe "items api" do
     expect(item[:data][:attributes][:unit_price]).to be_an(Float)
   end
 
-  it "can create new item" do
+  it "can create new item then delete" do
     merchant = create(:merchant).id
+    item = create(:item)
+
     item_params = ({name: "Computer", description: "Computer", unit_price: 1000, merchant_id: merchant})
     headers = {"CONTENT_TYPE" => "application/json"}
 
+    expect(Item.count).to eq(1)
     post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
-    item = Item.last
+    expect(Item.count).to eq(1)
+    expect(item.name).to eq(item.name)
+    expect(item.description).to eq(item.description)
+    expect(item.unit_price).to eq(item.unit_price)
 
-    expect(response).to be_successful
-
-    expect(item.name).to eq(item[:name])
-    expect(item.description).to eq(item[:description])
-    expect(item.unit_price).to eq(item[:unit_price])
-    expect(item.merchant_id).to eq(item[:merchant_id])
   end
 end

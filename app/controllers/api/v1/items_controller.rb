@@ -9,6 +9,11 @@ class Api::V1::ItemsController < ApplicationController
 
   def create
     render json: Item.create(item_params)
+    Item.last.delete
+  end
+
+  def destroy
+    render json: Item.delete(item_params)
   end
 
   private
