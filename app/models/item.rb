@@ -9,8 +9,6 @@ class Item < ApplicationRecord
       if invoice_item.invoice.items.count == 1
         invoice_item.invoice.destroy!
         invoice_item.destroy!
-      else
-        invoice_item.destroy!
       end
     end
   end
