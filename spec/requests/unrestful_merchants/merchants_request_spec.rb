@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "items api" do
+describe "merchants api" do
   describe "can find a item by keyword" do
     it "happy path" do
       merchant_1 = create(:merchant)

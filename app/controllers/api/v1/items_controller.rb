@@ -22,6 +22,15 @@ class Api::V1::ItemsController < ApplicationController
     render json: ItemSerializer.new(Item.update(item_params))
   end
 
+  def find
+    name = Item.search_by_name(params[:name])
+    if name.present?
+      render json: ItemSerializer.new(name)
+    else
+      render json: ItemSerializer.new(name)
+    end
+  end
+
   private
     def item_params
       params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
