@@ -39,13 +39,21 @@ describe "merchants api" do
 
   it "can return all merchant's items" do
     id = create(:merchant).id
-    items = create_list(:item, 10, merchant_id: id)
+    merchant_2 = create(:merchant)
+    all_items = create_list(:item, 10, merchant_id: id)
+    item_2 = create(:item, merchant_id: merchant_2.id)
 
     get "/api/v1/merchants/#{id}/items"
 
-    merchant = JSON.parse(response.body, symbolize_names: true)
+    items = JSON.parse(response.body, symbolize_names: true)
     expect(response).to be_successful
-    expect(merchant[:data]).to have_key(:relationships)
-    expect(merchant[:data][:relationships][:items][:data][0][:type]).to eq("item")
+
+    items[:data].each do |item|
+      expect(item).to have_key(:id)
+      expect(item[:id]).to eq(item[:id])
+      expect(item).to have_key(:relationships)
+      expect(item[:relationships][:merchant][:data][:type]).to eq("merchant")
+      expect(item[:relationships][:merchant][:data][:id]).to eq(id.to_s)
+    end
   end
 end
