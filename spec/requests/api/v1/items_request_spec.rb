@@ -130,7 +130,16 @@ describe "items api" do
 
   end
 
+  it "can return merchant for item" do
+    merchant = create(:merchant)
+    item = create(:item, merchant_id: merchant.id)
 
+    get "/api/v1/items/#{item.id}/merchant"
 
-
+    item = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(item[:data]).to have_key(:relationships)
+    expect(item[:data][:relationships][:merchant][:data][:type]).to eq("merchant")
+    expect(item[:data][:relationships][:merchant][:data][:id]).to eq(merchant.id.to_s)
+  end
 end
