@@ -8,8 +8,9 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    render json: ItemSerializer.new(Item.create(item_params))
-    Item.last.delete
+    item_to_destroy = Item.last
+    render json: ItemSerializer.new(Item.create!(item_params)), status: :created
+    item_to_destroy.destroy
   end
 
   def destroy
