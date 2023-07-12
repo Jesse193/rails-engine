@@ -111,16 +111,23 @@ describe "items api" do
 
   end
 
-  it "can destroy item" do
-    merchant = create(:merchant).id
-    item = Item.create(name: "Computer", description: "Computer", unit_price: 1000, merchant_id: merchant)
+  it "can destroy item and destroys invoice if there are no items" do
+    customer = Customer.create!(first_name: "Bob", last_name: "Smith" )
+    merchant = create(:merchant)
+    item = Item.create!(name: "Computer", description: "Computer", unit_price: 1000, merchant_id: merchant.id)
+    invoice = Invoice.create!(customer_id: customer.id, merchant_id: merchant.id, status: "Pending")
+    transaction = Transaction.create!(invoice_id: invoice.id, credit_card_number: 12345678, credit_card_expiration_date: 1/24, result: "pending")
+    invoice_item = InvoiceItem.create!(item_id: item.id, invoice_id: invoice.id)
+
     item_params = ({name: "Computer", description: "Computer", unit_price: 1000, merchant_id: merchant})
 
-    headers = {"CONTENT_TYPE" => "application/json"}
-    delete "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
-    item = JSON.parse(response.body, symbolize_names: true)
+    expect(item.invoices).to eq([invoice])
 
-    expect(response).to be_successful
+    delete "/api/v1/items/#{item.id}"
+
+    expect(Invoice.all).to eq([])
+    expect(Item.all).to eq([])
+
   end
 
 

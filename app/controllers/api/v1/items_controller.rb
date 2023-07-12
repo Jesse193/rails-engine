@@ -13,7 +13,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    render json: Item.delete(item_params)
+    item = Item.find(params[:id])
+    item.destroy
   end
 
   def update
