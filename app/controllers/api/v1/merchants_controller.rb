@@ -8,10 +8,7 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def find
-    if params[:search].present?
-      render json: MerchantSerializer.new(Merchant.find(merchant_params))
-    else
-      flash[:alert] = "error no merchant found"
-    end
+    name = Merchant.where(name == params[:name])
+    render json: MerchantSerializer.new(name)
   end
 end
