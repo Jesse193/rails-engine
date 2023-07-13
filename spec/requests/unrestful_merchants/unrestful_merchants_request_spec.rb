@@ -30,8 +30,8 @@ describe "merchants api" do
       merchant = JSON.parse(response.body, symbolize_names: true)
       expect(merchant[:data][:attributes][:name]).to eq("George Smith")
     end
-   xit "sad path" do
-      get "/api/v1/merchants/find?name=dogs"
+    xit "sad path" do
+      get "/api/v1/merchants/find?name=do"
       merchant = JSON.parse(response.body, symbolize_names: true)
       expect(merchant[:data]).to eq([])
     end

@@ -42,7 +42,7 @@ describe "items api" do
       expect(items[:data][1][:attributes][:description]).to eq("Computer for even more special tasks")
       expect(items[:data][1][:attributes][:unit_price]).to eq(1500)
     end
-    xit "sad path" do
+    it "sad path" do
       get "/api/v1/items/find_all?name=dogs"
       item = JSON.parse(response.body, symbolize_names: true)
       expect(item[:data]).to eq([])
@@ -80,19 +80,21 @@ describe "items api" do
       expect(items[:data][1]).to eq(nil)
       expect(items[:data][2]).to eq(nil)
     end
+
     it "sad path max_price" do
       merchant_1 = create(:merchant)
       merchant_2 = create(:merchant)
       item_1 = Item.create(name: "Computer", description: "Computer for special tasks", unit_price: 1000, merchant_id: merchant_1.id)
       item_2 = Item.create(name: "Phone", description: "Phone", unit_price: 950, merchant_id: merchant_2.id)
       item_3 = Item.create(name: "Computer 2.0", description: "Computer for even more special tasks", unit_price: 1500, merchant_id: merchant_1.id)
-      get "/api/v1/items/find?max_price=1"
+      get "/api/v1/items/find?max_price=0"
       items = JSON.parse(response.body, symbolize_names: true)
       expect(items[:data][0]).to eq(nil)
       expect(items[:data][1]).to eq(nil)
       expect(items[:data][2]).to eq(nil)
     end
-    it "sad path mix_price" do
+
+    it "sad path min_price" do
       merchant_1 = create(:merchant)
       merchant_2 = create(:merchant)
       item_1 = Item.create(name: "Computer", description: "Computer for special tasks", unit_price: 1000, merchant_id: merchant_1.id)
@@ -103,6 +105,15 @@ describe "items api" do
       expect(items[:data][0]).to eq(nil)
       expect(items[:data][1]).to eq(nil)
       expect(items[:data][2]).to eq(nil)
+    end
+
+    xit "edge case" do
+      item_1 = Item.create(name: "Computer", description: "Computer for special tasks", unit_price: 1000, merchant_id: merchant_1.id)
+      item_2 = Item.create(name: "Phone", description: "Phone", unit_price: 950, merchant_id: merchant_2.id)
+      item_3 = Item.create(name: "Computer 2.0", description: "Computer for even more special tasks", unit_price: 1500, merchant_id: merchant_1.id)
+      get "/api/v1/items/find?min_price=150&name=computer"
+      items = JSON.parse(response.body, symbolize_names: true)
+      expect(items[:data][0]).to eq(nil)
     end
   end
 end
