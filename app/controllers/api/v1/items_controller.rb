@@ -26,7 +26,6 @@ class Api::V1::ItemsController < ApplicationController
     name = Item.search_by_name(params[:name])
     max_price = Item.search_by_max_price(params[:max_price])
     min_price = Item.search_by_min_price(params[:min_price])
-
     if params[:min_price].present?
       render json: ItemSerializer.new(min_price)
     elsif params[:max_price].present?
