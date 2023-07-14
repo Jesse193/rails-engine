@@ -1,4 +1,5 @@
 class Api::V1::ItemsController < ApplicationController
+
   def index
     render json: ItemSerializer.new(Item.all)
   end
@@ -23,17 +24,24 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def find
-    name = Item.search_by_name(params[:name])
-    max_price = Item.search_by_max_price(params[:max_price])
-    min_price = Item.search_by_min_price(params[:min_price])
-    if params[:min_price].present?
-      render json: ItemSerializer.new(min_price)
-    elsif params[:max_price].present?
-      render json: ItemSerializer.new(max_price)
-    elsif name.present?
-      render json: ItemSerializer.new(name)
+    if !request.query_parameters.keys.include?("name" && "price")
+      min_price = Item.search_by_min_price(params[:min_price])
+      max_price = Item.search_by_max_price(params[:max_price])
+      price_range = Item.price_range(params[:min_price],[:max_price])
+      name = Item.search_by_name(params[:name])
+      if request.query_parameters.keys.include?("min" && "max") && request.query_parameters.values.min.to_i >= 0
+        render json: ItemSerializer.new(price_range)
+      elsif request.query_parameters.include?("min_price") && request.query_parameters.values.min.to_i >= 0
+        render json: ItemSerializer.new(min_price)
+      elsif request.query_parameters.include?("max_price") && request.query_parameters.values.min.to_i >= 0
+        render json: ItemSerializer.new(max_price)
+      elsif name != nil && request.query_parameters.keys.include?("name")
+        render json: ItemSerializer.new(name)
+      else
+        raise ActiveRecord::RecordInvalid
+      end
     else
-      render json: ItemSerializer.new(name)
+      raise ActiveRecord::RecordInvalid
     end
   end
 
