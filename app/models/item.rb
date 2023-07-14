@@ -33,7 +33,7 @@ class Item < ApplicationRecord
 
   def self.price_range(min, max)
     if min && max != nil
-      items = where("unit_price >= #{min}", "unit_price <= #{max}", "#{min} > -1").order(unit_price: :DESC)
+      items = where("unit_price >= #{min}" && "unit_price <= #{max}").order(unit_price: :DESC)
     end
   end
 end

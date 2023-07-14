@@ -121,5 +121,16 @@ describe "items api" do
       items = JSON.parse(response.body, symbolize_names: true)
       expect(items[:errors][0][:status]).to eq("400")
     end
+
+    it "can get items by min and max price" do
+      merchant_1 = create(:merchant)
+      merchant_2 = create(:merchant)
+      item_1 = Item.create(name: "Computer", description: "Computer for special tasks", unit_price: 1000, merchant_id: merchant_1.id)
+      item_2 = Item.create(name: "Phone", description: "Phone", unit_price: 950, merchant_id: merchant_2.id)
+      item_3 = Item.create(name: "Computer 2.0", description: "Computer for even more special tasks", unit_price: 1500, merchant_id: merchant_1.id)
+      get "/api/v1/items/find?min_price=150&max_price=950"
+      items = JSON.parse(response.body, symbolize_names: true)
+      expect(items[:data][0][:attributes][:name]).to eq("Phone")
+    end
   end
 end
