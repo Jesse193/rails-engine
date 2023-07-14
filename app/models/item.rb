@@ -14,14 +14,26 @@ class Item < ApplicationRecord
   end
 
   def self.search_by_name(name)
-    where("name ILIKE ?", "%#{name}%")
+    if name != ""
+      where("name ILIKE ?", "%#{name}%")
+    end
   end
 
   def self.search_by_min_price(price)
-    where("unit_price >= #{price}")
+    if price != nil 
+      items = where("unit_price >= #{price}", "#{price} > -1").order(unit_price: :ASC)
+    end
   end
 
   def self.search_by_max_price(price)
-    where("unit_price <= #{price}")
+    if price != nil
+      items = where("unit_price <= #{price}", "#{price} > -1").order(unit_price: :DESC)
+    end
+  end
+
+  def self.price_range(min, max)
+    if min && max != nil
+      items = where("unit_price >= #{min}", "unit_price <= #{max}", "#{min} > -1").order(unit_price: :DESC)
+    end
   end
 end
