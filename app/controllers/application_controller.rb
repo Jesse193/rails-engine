@@ -10,9 +10,13 @@ class ApplicationController < ActionController::API
     render json: ErrorSerializer.new(error).no_name, status: 400
   end
 
-  before_action :beforeFilter, :only => [:search]  
+  before_action :find_filter, :only => [:find], controller: "items"
 
-  def beforeFilter
+  def find_filter
+    min_price = Item.search_by_min_price(params[:min_price])
+    max_price = Item.search_by_max_price(params[:max_price])
+    price_range = Item.price_range(params[:min_price], params[:max_price])
+    name = Item.search_by_name(params[:name])
     if request.query_parameters.keys.include?("min_price" && "max_price") && request.query_parameters.keys.count == 2
       render json: ItemSerializer.new(price_range)
     elsif request.query_parameters.include?("min_price") && request.query_parameters.values.min.to_i >= 0 && !request.query_parameters.include?("name")
