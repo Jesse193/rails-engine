@@ -32,8 +32,7 @@ RSpec.describe Item, type: :model do
 
   describe "instance methods" do
     xit "delete_invoices" do
-      @item_1.delete_invoice
-      @item_1.destroy
+      delete "/api/v1/items/#{@item_1.id}"
       expect(@invoice).to eq(nil)
     end
   end

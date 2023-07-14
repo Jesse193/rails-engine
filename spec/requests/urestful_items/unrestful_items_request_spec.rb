@@ -20,7 +20,7 @@ describe "items api" do
       expect(items[:data][1][:attributes][:unit_price]).to eq(1500)
     end
 
-    xit "sad path no results" do
+    it "sad path no results" do
       get "/api/v1/items/find_all?name=dogs"
 
       expect(response).to be_successful
@@ -49,7 +49,7 @@ describe "items api" do
       expect(items[:data][1][:attributes][:unit_price]).to eq(1500)
     end
 
-    xit "sad path" do
+    it "sad path" do
       get "/api/v1/items/find_all?name=dogs"
       item = JSON.parse(response.body, symbolize_names: true)
       expect(item[:data]).to eq([])

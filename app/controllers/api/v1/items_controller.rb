@@ -30,13 +30,15 @@ class Api::V1::ItemsController < ApplicationController
     name = Item.search_by_name(params[:name])
     if request.query_parameters.keys.include?("min_price" && "max_price") && request.query_parameters.keys.count == 2
       render json: ItemSerializer.new(price_range)
-    elsif request.query_parameters.include?("min_price") && request.query_parameters.values.min.to_i >= 0
+    elsif request.query_parameters.include?("min_price") && request.query_parameters.values.min.to_i >= 0 && !request.query_parameters.include?("name")
       render json: ItemSerializer.new(min_price)
-    elsif request.query_parameters.include?("max_price") && request.query_parameters.values.min.to_i >= 0
+    elsif request.query_parameters.include?("max_price") && request.query_parameters.values.min.to_i >= 0 && !request.query_parameters.include?("name")
       render json: ItemSerializer.new(max_price)
-    elsif name != nil && request.query_parameters.keys.include?("name")
+    elsif name != nil && request.query_parameters.keys.include?("name") && !request.query_parameters.include?("max_price") && !request.query_parameters.include?("min_price")
       render json: ItemSerializer.new(name)
-    elsif request.query_parameters.keys.include?("name" && "max_price" || "min_price")
+    elsif name = "" && request.query_parameters.keys.include?("name") && !request.query_parameters.include?("max_price") && !request.query_parameters.include?("min_price")
+      render json: {}
+    elsif request.query_parameters.keys.include?("name" && "max_price") || request.query_parameters.keys.include?("name" && "min_price")
       raise ActiveRecord::RecordInvalid
     else
       raise ActiveRecord::RecordInvalid
