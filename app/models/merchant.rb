@@ -6,6 +6,8 @@ class Merchant < ApplicationRecord
   has_many :transactions, through: :invoices
 
   def self.search_by_name(name)
-    where("name ILIKE ?", "%#{name}%")
+    if !name.empty?
+      where("name ILIKE ?", "%#{name}%").first
+    end
   end
 end

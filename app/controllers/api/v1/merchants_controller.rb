@@ -8,18 +8,16 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def find
-    name = Merchant.search_by_name(merchant_params[:name]).first
-    if name.present?
+    name = Merchant.search_by_name(merchant_params[:name])
+    if !params[:name].empty?
       render json: MerchantSerializer.new(name)
     else
-      render json: MerchantSerializer.new(name)
+      raise ActiveRecord::RecordInvalid
     end
   end
 
   private
-
   def merchant_params
     params.permit(:id, :name)
   end
-
 end

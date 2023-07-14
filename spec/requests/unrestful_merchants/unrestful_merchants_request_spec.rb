@@ -12,8 +12,12 @@ describe "merchants api" do
       merchant = JSON.parse(response.body, symbolize_names: true)
       expect(merchant[:data][:attributes][:name]).to eq(merchant_1.name)
     end
-    xit "sad path" do
+    
+    xit "sad path invalid name" do
       get "/api/v1/merchants/find?name=dogs"
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+      
       merchant = JSON.parse(response.body, symbolize_names: true)
       expect(merchant[:data]).to eq([])
     end
@@ -30,11 +34,17 @@ describe "merchants api" do
       merchant = JSON.parse(response.body, symbolize_names: true)
       expect(merchant[:data][:attributes][:name]).to eq("George Smith")
     end
-   xit "sad path" do
-      get "/api/v1/merchants/find?name=dogs"
-      merchant = JSON.parse(response.body, symbolize_names: true)
-      expect(merchant[:data]).to eq([])
+
+   xit "sad path no name given" do
+      merchant_1 = create(:merchant)
+      get "/api/v1/merchants/find?name="
+      
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+
+      item = JSON.parse(response.body, symbolize_names: true)
+      expect(item[:errors]).to be_a(Array)
+      expect(item[:errors].first[:status]).to eq("400")
     end
   end
-
 end

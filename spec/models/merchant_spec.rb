@@ -8,4 +8,12 @@ RSpec.describe Merchant, type: :model do
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
   end
+
+  describe "class methods" do
+    it "#search_by_name" do
+      merchant_1 = create(:merchant, name: "Bill Smith")
+      merchant_2 = create(:merchant, name: "William")
+      expect(Merchant.search_by_name("Bill")). to eq(merchant_1)
+    end
+  end
 end

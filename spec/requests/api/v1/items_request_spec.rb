@@ -92,23 +92,21 @@ describe "items api" do
 
     expect(response).to be_successful
 
-    expect(item[:data][0]).to have_key(:id)
-    expect(item[:data][0][:id].to_i).to be_an(Integer)
+    expect(item[:data]).to have_key(:id)
+    expect(item[:data][:id].to_i).to be_an(Integer)
 
-    expect(item[:data][0][:attributes]).to have_key(:name)
-    expect(item[:data][0][:attributes][:name]).to be_an(String)
+    expect(item[:data][:attributes]).to have_key(:name)
+    expect(item[:data][:attributes][:name]).to be_an(String)
 
-    expect(item[:data][0][:attributes]).to have_key(:description)
-    expect(item[:data][0][:attributes][:description]).to be_an(String)
+    expect(item[:data][:attributes]).to have_key(:description)
+    expect(item[:data][:attributes][:description]).to be_an(String)
 
-    expect(item[:data][0][:attributes]).to have_key(:unit_price)
-    expect(item[:data][0][:attributes][:unit_price]).to be_an(Float)
+    expect(item[:data][:attributes]).to have_key(:unit_price)
+    expect(item[:data][:attributes][:unit_price]).to be_an(Float)
 
-    expect(item[:data][0][:attributes][:name]).to eq("Computer")
-    expect(item[:data][0][:attributes][:description]).to_not eq("Computer")
-    expect(item[:data][0][:attributes][:unit_price]).to eq(1000)
-
-
+    expect(item[:data][:attributes][:name]).to eq("Computer")
+    expect(item[:data][:attributes][:description]).to_not eq("Computer")
+    expect(item[:data][:attributes][:unit_price]).to eq(1000)
   end
 
   it "can destroy item and destroys invoice if there are no items" do
