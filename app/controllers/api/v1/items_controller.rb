@@ -24,7 +24,9 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def find
-    if !request.query_parameters.keys.include?("name" && "price")
+    if request.query_parameters.keys.include?("name" && "max_price" && "min_price")
+      raise ActiveRecord::RecordInvalid
+    else
       min_price = Item.search_by_min_price(params[:min_price])
       max_price = Item.search_by_max_price(params[:max_price])
       price_range = Item.price_range(params[:min_price],[:max_price])
@@ -40,8 +42,6 @@ class Api::V1::ItemsController < ApplicationController
       else
         raise ActiveRecord::RecordInvalid
       end
-    else
-      raise ActiveRecord::RecordInvalid
     end
   end
 
